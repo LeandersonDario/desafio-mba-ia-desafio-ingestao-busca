@@ -50,7 +50,7 @@ def split_pdf(documents):
     return chunks
 
 def create_embeddings_and_store(chunks):
-    """Cria embeddings e armazena no pgvector."""
+    """Creates embeddings and stores them in pgvector."""
 
     if not EMBEDDING_MODEL:
         print("❌ Erro: EMBEDDING_MODEL não encontrada!")

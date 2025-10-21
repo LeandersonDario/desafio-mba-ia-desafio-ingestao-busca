@@ -10,7 +10,7 @@ load_dotenv()
 PDF_PATH = os.getenv("PDF_PATH")
 PGVECTOR_URL = os.getenv("DATABASE_URL")
 PGVECTOR_COLLECTION = os.getenv("PG_VECTOR_COLLECTION_NAME")
-EMBEDDING_MODEL = os.getenv("GOOGLE_EMBEDDING_MODEL")
+EMBEDDING_MODEL = os.getenv("GOOGLE_EMBEDDING_MODEL", "models/embedding-001")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 def load_pdf(path: str):
@@ -65,10 +65,10 @@ def create_embeddings_and_store(chunks):
     print("Inicializando embeddings do Google...")
     embeddings = GoogleGenerativeAIEmbeddings(
         model=EMBEDDING_MODEL,
-        api_key=GOOGLE_API_KEY
+        google_api_key=GOOGLE_API_KEY
     )    
     
-    print("Inicializando cliente pgvector...")
+    print("Criando e populando o vector store...")
     vector_store = PGVector.from_documents(
         embedding=embeddings,
         documents=chunks,
@@ -77,20 +77,32 @@ def create_embeddings_and_store(chunks):
         use_jsonb=True,
     )
 
-    print("Inserindo chunks no banco de dados...")
-    vector_store.add_documents(chunks)
-
     print(f"✅ Ingestão concluída! {len(chunks)} chunks foram inseridos no banco de dados.")
     return vector_store  
     
 def ingest_pdf():
     """Ingest a PDF file, split it into chunks, create embeddings, and store them."""
+    
+    # Verifica se as variáveis de ambiente estão configuradas
+    required_vars = ["PDF_PATH", "DATABASE_URL", "PG_VECTOR_COLLECTION_NAME", "GOOGLE_API_KEY"]
+    missing_vars = [var for var in required_vars if not os.getenv(var)]
+    
+    if missing_vars:
+        print("❌ Erro: Variáveis de ambiente não configuradas:")
+        for var in missing_vars:
+            print(f"   - {var}")
+        print("Por favor, configure as variáveis no arquivo .env")
+        return
+    
     try:
         documents = load_pdf(PDF_PATH)
         if not documents:
             return
 
         chunks = split_pdf(documents)
+        if not chunks:
+            return
+            
         create_embeddings_and_store(chunks)
 
         print("\n🎉 Ingestão concluída com sucesso!")

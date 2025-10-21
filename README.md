@@ -139,7 +139,6 @@ desafio-mba-ia-desafio-ingestao-busca/
 ├── 📄 .env                       # Configuração (não versionado)
 ├── 📄 document.pdf               # PDF para ingestão
 ├── 📄 README.md                  # Este arquivo
-├── 📄 REQUIREMENTS.md            # Especificação técnica
 └── 📁 src/
     ├── 🐍 ingest.py              # Ingestão de PDF
     ├── 🐍 search.py              # Busca semântica

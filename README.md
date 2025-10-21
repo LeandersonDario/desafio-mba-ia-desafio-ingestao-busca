@@ -58,8 +58,8 @@ GOOGLE_EMBEDDING_MODEL=models/embedding-001
 GOOGLE_LLM_MODEL=gemini-2.5-flash-lite
 
 # PostgreSQL + pgVector
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/vectordb
-PG_VECTOR_COLLECTION_NAME=pdf_chunks
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/rag
+PG_VECTOR_COLLECTION_NAME=rag
 
 # Arquivo PDF
 PDF_PATH=document.pdf
@@ -259,7 +259,6 @@ Para contribuir com o projeto:
 
 ## 📝 Documentação Adicional
 
-- 📖 **Especificação Completa**: [REQUIREMENTS.md](REQUIREMENTS.md)
 - 🔧 **Configuração Avançada**: Consulte os comentários no código
 - 🐛 **Troubleshooting**: Seção de solução de problemas acima
 
